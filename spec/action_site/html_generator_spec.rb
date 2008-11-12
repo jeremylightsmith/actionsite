@@ -5,12 +5,14 @@ describe ActionSite::HtmlGenerator do
   attr_reader :generator
   
   before do
-    @generator = ActionSite::HtmlGenerator.new(ActionSite::Context.new, sandbox.root)
+    @generator = ActionSite::HtmlGenerator.new(ActionSite::Context.new, 
+                                               sandbox.root, 
+                                               ActionSite::DEFAULT_GENERATORS)
   end
   
   describe "default generators" do
     it "should have erb, mab, yaml, red" do
-      ActionSite.generators.keys.sort.should == %w(erb mab red yaml yml)
+      ActionSite::DEFAULT_GENERATORS.keys.sort.should == %w(erb mab red yaml yml)
     end
   end
   

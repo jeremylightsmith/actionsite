@@ -3,7 +3,7 @@ module ActionSite
     class RedclothGenerator
       def process(context, content)
         redcloth = RedCloth.new(content)
-        content = redcloth.to_html(:html, :textile)
+        redcloth.to_html(:html, :textile)
       end
     end
   end

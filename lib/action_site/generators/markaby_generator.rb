@@ -4,7 +4,7 @@ module ActionSite
       def process(context, content)
         builder = Markaby::Builder.new({}, context)
         builder.instance_eval content, context.file_name
-        content = builder.to_s
+        builder.to_s
       end
     end
   end

@@ -10,27 +10,29 @@ require 'action_site/generators/yaml_generator'
 module ActionSite
   EXCLUDED_DIRECTORIES = %w(layouts helpers)
   RESOURCE_EXTENSIONS = %w(css ico gif jpg png js)
-
-  def self.generators
-    @generators ||= {
-      "erb" => Generators::ErbGenerator.new,
-      "mab" => Generators::MarkabyGenerator.new,
-      "red" => Generators::RedclothGenerator.new,
-      "yml" => Generators::YamlGenerator.new,
-      "yaml" => Generators::YamlGenerator.new
-    }
-  end
-
+  DEFAULT_GENERATORS = {
+    "erb" => Generators::ErbGenerator.new,
+    "mab" => Generators::MarkabyGenerator.new,
+    "red" => Generators::RedclothGenerator.new,
+    "yml" => Generators::YamlGenerator.new,
+    "yaml" => Generators::YamlGenerator.new
+  }
+  
   class Site
     attr_reader :context
-    
+
     def initialize(in_dir, out_dir)
       @context = Context.new
-      @generator = HtmlGenerator.new(@context, in_dir)
+      @generator = HtmlGenerator.new(@context, in_dir, generators)
       @in_dir, @out_dir = in_dir, out_dir
       puts "\nGENERATING #{File.basename(in_dir).upcase}\n\n"
       rm_rf out_dir
       mkdir_p out_dir
+    end
+    
+    # add / remove / change generators to change the behavior of the html generation
+    def generators
+      @generators ||= DEFAULT_GENERATORS.dup
     end
     
     def generate(in_dir = @in_dir, out_dir = @out_dir)

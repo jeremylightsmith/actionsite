@@ -4,8 +4,9 @@ module ActionSite
   class HtmlGenerator
     attr_reader :template_directory
   
-    def initialize(site_context, template_directory)
-      @site_context, @template_directory = site_context, template_directory
+    def initialize(site_context, template_directory, generators)
+      @site_context, @template_directory, @generators = 
+        site_context, template_directory, generators
     end
 
     def process_file(file, context = new_context(file), apply_layout = true)
@@ -18,7 +19,7 @@ module ActionSite
     def process(file_name, context, content, apply_layout = true)
       file_name, extension = file_name.split_filename
 
-      generator = ActionSite.generators[extension]
+      generator = @generators[extension]
       if generator
         content = generator.process(context, content)
 
