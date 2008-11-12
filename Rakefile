@@ -11,7 +11,13 @@ end
 
 desc "generate the example site"
 task :example do
-  Dir.chdir(File.dirname(__FILE__)) do
-    ActionSite::Site.new("example/src", "example/public").generate
-  end
+  ActionSite::Site.new("example/src", "example/public").generate
 end
+
+desc "generate gemspec"
+task :gemspec do
+  File.open("actionsite.gemspec", "w") do |f| 
+    f << ERB.new(File.read("actionsite.gemspec.erb"), 0, "%<>").result(binding)
+  end  
+end
+

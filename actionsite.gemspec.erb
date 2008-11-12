@@ -1,0 +1,17 @@
+Gem::Specification.new do |s|
+  s.name     = "actionsite"
+  s.version  = "0.1"
+  s.date     = "2008-11-12"
+  s.summary  = "A static site generator patterned after rails view templates supporting erb, yaml, redcloth and markaby(ish)"
+  s.email    = "jeremy.lightsmith@gmail.com"
+  s.homepage = "http://github.com/jeremylightsmith/actionsite"
+  s.description = "ActionSite is a static site generator for ruby patterned after rails view templates supporting erb, yaml, redcloth and markaby(ish)."
+  s.has_rdoc = false
+  s.authors  = ["Jeremy Lightsmith"]
+  s.files    = <%= FileList["Rakefile", "readme.txt", "lib/**/*", "example/src/**/*"].to_a.inspect %>
+  s.test_files = <%= FileList["spec/**/*"].to_a.inspect %>
+  
+  s.add_dependency("activesupport", ["> 0.0.0"])
+  s.add_dependency("RedCloth", ["> 0.0.0"])
+  s.add_dependency("markaby", ["> 0.0.0"])
+end
