@@ -16,3 +16,7 @@ require 'action_site/extensions/string'
 
 require 'action_site/site'
 require 'action_site/link_checker'
+
+module ActionSite
+  VERSION = 0.2
+end

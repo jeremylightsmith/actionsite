@@ -3,7 +3,7 @@ $LOAD_PATH << File.expand_path(File.dirname(__FILE__) + "/lib")
 require 'action_site'
 require 'spec/rake/spectask'
 
-task :default => [:spec, :example]
+task :default => [:spec, :gemspec, :example]
 
 Spec::Rake::SpecTask.new(:spec) do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
