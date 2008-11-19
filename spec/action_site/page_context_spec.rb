@@ -2,10 +2,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 module ActionSite
   describe PageContext do
+    include FileSandbox
     attr_reader :context
     
     before do
-      @context = PageContext.new(nil, nil, nil)
+      @generator = ActionSite::HtmlGenerator.new(ActionSite::Context.new, 
+                                                 sandbox.root, 
+                                                 ActionSite::DEFAULT_GENERATORS)
+      @context = @generator.new_context(nil)
     end
     
     it "should allow setting new variables and accessing them" do

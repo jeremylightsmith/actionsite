@@ -9,7 +9,7 @@ require 'action_site/generators/yaml_generator'
 
 module ActionSite
   EXCLUDED_DIRECTORIES = %w(layouts helpers)
-  RESOURCE_EXTENSIONS = %w(css ico gif jpg png js)
+  RESOURCE_EXTENSIONS = %w(css ico gif jpg png js pdf)
   DEFAULT_GENERATORS = {
     "erb" => Generators::ErbGenerator.new,
     "mab" => Generators::MarkabyGenerator.new,

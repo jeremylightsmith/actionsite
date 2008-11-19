@@ -57,6 +57,15 @@ describe ActionSite::HtmlGenerator do
             'hello world'
           end
         end"
+
+      sandbox.new :file => 'helpers/application_helper.rb', 
+                  :with_contents => "
+        module ApplicationHelper
+          def bob
+            'the builder'
+          end
+        end"
+        
       sandbox.new :file => "layouts/application.html.erb", 
                   :with_contents => "<%= content %>"
     end
@@ -64,6 +73,25 @@ describe ActionSite::HtmlGenerator do
     it "should be able to use a helper" do
       process("*.html.erb", "% helper 'test'\n<%= some_test_method %>").
                 should == "hello world"
+    end
+    
+    it "should allow multiple helpers with same name between sites" do
+      process("*.html.erb", "<%= bob %>").should == "the builder"
+
+      sandbox.new :file => 'helpers/application_helper.rb', 
+                  :with_contents => "
+        module ApplicationHelper
+          def jack
+            'the bricklayer'
+          end
+        end"
+
+        process("*.html.erb", "<%= jack %>").should == "the bricklayer"
+        proc {process("*.html.erb", "<%= bob %>")}.should raise_error
+    end
+    
+    it "should include application_helper.rb if it is there" do
+      process("*.html.erb", "<%= bob %>").should == "the builder"
     end
   end
   

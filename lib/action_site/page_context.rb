@@ -17,6 +17,7 @@ module ActionSite
       @html_generator, @global_context, @file_name = 
         html_generator, global_context, file_name
       layout(:application) rescue nil
+      helper(:application, false)
     end
   
     def layout(name)
@@ -33,17 +34,18 @@ module ActionSite
       @html_generator.process_file(*args)
     end
   
-    def helper(name)
+    def helper(name, assert_loaded = true)
       file_name = "#{name}_helper"
+      fully_qualified_file = File.join(@html_generator.template_directory, "helpers", file_name + ".rb")
+      return unless File.exist?(fully_qualified_file) || assert_loaded
+      
       class_name = file_name.classify
-      helper = begin
-        class_name.constantize
-      rescue NameError # this constant hasn't been loaded yet
-        require File.join(@html_generator.template_directory, "helpers", file_name)
-        class_name.constantize
+      if Object.const_defined?(class_name)
+        Object.send(:remove_const, class_name)
       end
-    
-      metaclass.send(:include, helper)
+
+      load fully_qualified_file
+      metaclass.send(:include, class_name.constantize)
     end
   
     def content_for(name)
