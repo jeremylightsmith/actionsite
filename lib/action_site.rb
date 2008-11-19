@@ -15,3 +15,4 @@ require 'yaml'
 require 'action_site/extensions/string'
 
 require 'action_site/site'
+require 'action_site/link_checker'
