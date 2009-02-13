@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = "actionsite"
-  s.version  = 0.2
+  s.version  = "0.3"
   s.date     = "2008-11-12"
   s.summary  = "A static site generator patterned after rails view templates supporting erb, yaml, redcloth and markaby(ish)"
   s.email    = "jeremy.lightsmith@gmail.com"
