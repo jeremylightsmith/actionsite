@@ -11,36 +11,39 @@ module ActionSite
     end
   
     def check(url, host = nil, indent = "")
-      url = url.sub(/\#.*/, '')
-      return if url.blank?
-      return if @options[:local] && host && !local?(host, url)
+      url = clean_url(url)
+      return if ignore_url?(url, host)
       return if @checked_urls.include?(url)
       @checked_urls << url
       
       puts "#{indent}checking #{url}"
 
-      begin
-        url, html = fetch(url)
-      rescue
-        puts "#{url} not found"
-        raise
-      end
+      url, html = fetch(url)
       
       host ||= host_for(url)
-      doc = Hpricot(html)
-
       if local?(host, url)
-        (doc / "a").each do |link|
-          if child_link = expand_link(url, link["href"])
-            begin
-              check child_link, host, indent + "   "
-            rescue
-              puts "from #{url} as #{link}"
-              raise
-            end
+        links_from(html, url).each do |child_url|
+          begin
+            check child_url, host, indent + "   "
+          rescue
+            puts "from #{url} as #{link}"
+            raise
           end
         end
       end
+    end
+    
+    def clean_url(url)
+      url.sub(/\#.*/, '')
+    end
+    
+    def ignore_url?(url, host = nil)
+      url.blank? || (@options[:local] && host && !local?(host, url))
+    end
+    
+    def links_from(html, url)
+      doc = Hpricot(html)
+      (doc / "a").map {|link| expand_link(url, link["href"])}.compact
     end
   
     def expand_link(from, to)
@@ -89,6 +92,9 @@ module ActionSite
       else
         response.error!
       end
+    rescue
+      puts "#{url} not found"
+      raise
     end
     
     def host_for(url)
