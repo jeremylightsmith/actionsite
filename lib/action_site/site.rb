@@ -38,12 +38,9 @@ module ActionSite
       @generators ||= DEFAULT_GENERATORS.dup
     end
     
-    def generate(in_dir = @in_dir, out_dir = @out_dir)
-      Dir.chdir(@in_dir) do
-        Dir["**/*"].each do |path|
-          refresh_page path
-        end
-      end
+    def generate
+      Dir[@in_dir + "/**/*"].map {|path| path.sub(@in_dir, '') }.
+                             each {|path| refresh_page(path) }
     end
     
     def refresh_page(path)
@@ -58,19 +55,18 @@ module ActionSite
         # nothing
       
       elsif File.symlink?(in_file)
-        mkdir_p File.dirname(out_file)
+        ensure_directory_exists(out_file)
         cp in_file, out_file rescue nil # maybe the links don't exist here
 
       elsif File.directory?(in_file)
-        mkdir_p out_file
-        generate in_file, out_file
+        ensure_directory_exists(out_file)
     
       elsif resource?(in_file)
-        mkdir_p File.dirname(out_file)
+        ensure_directory_exists(out_file)
         ln_sf File.expand_path(in_file), File.expand_path(out_file)
 
       else 
-        mkdir_p File.dirname(out_file)
+        ensure_directory_exists(out_file)
         out_file = out_file.gsub(/\..+$/, '.html')
         generate_page(in_file, out_file)
         puts "   #{in_file} => #{out_file}"
@@ -78,7 +74,11 @@ module ActionSite
     end
     
     def excluded?(file)
-      File.directory?(file) && EXCLUDED_DIRECTORIES.include?(File.basename(file))
+      if File.directory?(file)
+        EXCLUDED_DIRECTORIES.include?(File.basename(file))
+      elsif File.file?(file)
+        EXCLUDED_DIRECTORIES.include?(File.basename(File.dirname(file)))
+      end
     end
   
     def resource?(file)
@@ -109,6 +109,11 @@ module ActionSite
     end
     
     private
+    
+    def ensure_directory_exists(file)
+      dir = File.dirname(file)
+      mkdir_p(dir) unless File.directory?(dir)
+    end
     
     def generate_page(in_file, out_file)
       File.open(out_file, "w") do |f| 
