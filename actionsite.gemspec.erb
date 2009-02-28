@@ -14,4 +14,5 @@ Gem::Specification.new do |s|
   s.add_dependency("activesupport", ["> 0.0.0"])
   s.add_dependency("RedCloth", ["> 0.0.0"])
   s.add_dependency("markaby", ["> 0.0.0"])
+  s.add_dependency("thin", [">= 1.0.0"])
 end
