@@ -93,7 +93,11 @@ module ActionSite
           path = env["PATH_INFO"] = File.join(path, "index.html")
         end
 
-        refresh_page(path)
+        begin
+          refresh_page(path)
+        rescue Exception
+          return [500, {"Content-Type" => "text/plain"}, "Error in generation :\n\n#{$!.to_s}\n#{$!.backtrace.join("\n")}"]
+        end
 
         Rack::File.new("public/brenda").call(env)
       end

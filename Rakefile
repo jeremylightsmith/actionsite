@@ -18,6 +18,7 @@ desc "generate gemspec"
 task :gemspec do
   File.open("actionsite.gemspec", "w") do |f| 
     f << ERB.new(File.read("actionsite.gemspec.erb"), 0, "%<>").result(binding)
-  end  
+  end
+  puts "generated gemspec for actionsite #{ActionSite::VERSION}"
 end
 
