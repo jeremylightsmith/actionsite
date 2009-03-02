@@ -88,7 +88,7 @@ module ActionSite
     def serve(port = 3000)
       app = proc do |env|
         path = env["PATH_INFO"]
-        file = File.join("public", "brenda", path)
+        file = File.join(@out_dir, path)
         if File.directory?(file)
           path = env["PATH_INFO"] = File.join(path, "index.html")
         end
@@ -99,7 +99,7 @@ module ActionSite
           return [500, {"Content-Type" => "text/plain"}, "Error in generation :\n\n#{$!.to_s}\n#{$!.backtrace.join("\n")}"]
         end
 
-        Rack::File.new("public/brenda").call(env)
+        Rack::File.new(@out_dir).call(env)
       end
 
       Thin::Server.start('0.0.0.0', port) do

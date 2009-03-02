@@ -19,5 +19,5 @@ require 'action_site/link_checker'
 require 'action_site/async_link_checker'
 
 module ActionSite
-  VERSION = "0.6.1"
+  VERSION = "0.6.2"
 end
