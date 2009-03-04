@@ -94,6 +94,7 @@ module ActionSite
         end
 
         begin
+          yield path if block_given?
           refresh_page(path)
         rescue Exception
           return [500, {"Content-Type" => "text/plain"}, "Error in generation :\n\n#{$!.to_s}\n#{$!.backtrace.join("\n")}"]
