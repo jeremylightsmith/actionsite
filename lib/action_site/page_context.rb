@@ -61,7 +61,7 @@ module ActionSite
       return @global_context.send(sym, *args) if @global_context.respond_to?(sym)
 
       name = sym.to_s
-      if name.start_with?("content_for_") && name.ends_with?("?")
+      if name.start_with?("content_for_") && name.end_with?("?")
         return !!instance_variable_get("@#{name[0..-2]}")
       end
 

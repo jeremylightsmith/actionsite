@@ -62,7 +62,7 @@ module ActionSite
     end
     
     def relative_link(from, to)
-      from += "." if from.ends_with?("/")
+      from += "." if from.end_with?("/")
       
       from = from.split("/")
       to = to.split("/")
