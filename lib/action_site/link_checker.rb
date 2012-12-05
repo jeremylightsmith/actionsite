@@ -106,7 +106,7 @@ module ActionSite
     end
     
     def local?(host, url)
-      url.starts_with?(host)
+      url.start_with?(host)
     end
   end
 end

@@ -3,6 +3,7 @@ require 'action_site/context'
 require 'action_site/helpers/form_helper'
 require 'action_site/helpers/markaby_helper'
 require 'action_site/helpers/url_helper'
+require 'active_support/core_ext/string/inflections'
 
 module ActionSite
   # an instance of this class is created for each page
@@ -60,7 +61,7 @@ module ActionSite
       return @global_context.send(sym, *args) if @global_context.respond_to?(sym)
 
       name = sym.to_s
-      if name.starts_with?("content_for_") && name.ends_with?("?")
+      if name.start_with?("content_for_") && name.ends_with?("?")
         return !!instance_variable_get("@#{name[0..-2]}")
       end
 
